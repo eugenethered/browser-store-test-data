@@ -16,7 +16,6 @@ npm install --save-dev browser-store-test-data
 ## Usage
 The main intended method to use this in your project via webpack plugin.
 
-
 ### Webpack Plugin Usage
 ```js
 // load the library and add to plugins section with options
