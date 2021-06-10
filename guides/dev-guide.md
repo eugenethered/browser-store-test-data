@@ -45,5 +45,10 @@ alias browser-store-test-data.lxc.run-in="lxc.run-in.container browser-store-tes
 alias browser-store-test-data.project="cd ~/projects/code/node-module/browser-store-test-data"
 ```
 
+## Publishing
+1. `npm adduser`
+2. `npm login`
+3. `npm publish --access=public`
+
 ## Resources
 * [Linux Containers (LXD/LXC)](https://linuxcontainers.org/lxd/introduction/)

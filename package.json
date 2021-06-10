@@ -1,5 +1,5 @@
 {
-  "name": "browser-store-test-data",
+  "name": "@eugenethered/browser-store-test-data",
   "version": "0.0.1",
   "description": "A simple way to load test data for the browser store.",
   "homepage": "https://github.com/eugene-the-red/browser-store-test-data#readme",
