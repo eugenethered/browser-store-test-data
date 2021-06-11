@@ -27,6 +27,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -36,8 +39,7 @@ jobs:
       - name: Prepare release
         run: npm run prepare
       - name: Release
-        run: |
-          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-          npm run release
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm semantic-release
