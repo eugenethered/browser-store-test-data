@@ -107,6 +107,3 @@ lib
 #intellij
 .idea
 *.iml
-
-# package
-package-lock.json
