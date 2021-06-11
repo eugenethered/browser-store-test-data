@@ -1,6 +1,6 @@
 {
   "name": "browser-store-test-data",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple way to load test data for the browser store.",
   "homepage": "https://github.com/eugene-the-red/browser-store-test-data#readme",
   "author": {
@@ -28,7 +28,7 @@
   "files": [
     "lib"
   ],
-  "main": "lib/BrowserStoreTestDataPlugin.js",
+  "main": "lib/index.js",
   "engines": {
     "node": ">=10"
   },

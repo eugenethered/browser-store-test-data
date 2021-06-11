@@ -1,25 +1,34 @@
 # Browser Store Test Data
+![npm](https://img.shields.io/npm/v/browser-store-test-data)
+[![dependencies Status](https://status.david-dm.org/gh/eugene-the-red/browser-store-test-data.svg)](https://david-dm.org/eugene-the-red/browser-store-test-data)
+[![install size](https://packagephobia.com/badge?p=browser-store-test-data)](https://packagephobia.com/result?p=browser-store-test-data)
+![GitHub issues](https://img.shields.io/github/issues/eugene-the-red/browser-store-test-data)
+
 A simple way to load test data for the browser store. Supports IndexDB.
 
-# Index
+| :warning: Warning!  :warning: |
+|--------------- |
+| This is still in a brief work in progress |
+
+## Index
 - [Installation](#installation)
 - [Usage](#usage)
   - [Webpack Plugin Usage](#webpack-plugin-usage)
 - [Development](#development)
 
-## Installation
+### Installation
 ```shell
 # Using npm, installing to local project (development)
 npm install --save-dev browser-store-test-data
 ```
 
-## Usage
+### Usage
 The main intended method to use this in your project via webpack plugin.
 
 ### Webpack Plugin Usage
 ```js
 // load the library and add to plugins section with options
-const BrowserStoreTestDataPlugin = require('browser-store-stest-data-plugin')
+const BrowserStoreTestDataPlugin = require('browser-store-test-data')
 
 plugins: [
     new BrowserStoreTestDataPlugin([
@@ -31,8 +40,8 @@ plugins: [
 ]    
 ```
 
-## Development
+### Development
 See the specific [development guide](guides/dev-guide.md).
 
-## License
+### License
 (Unlicense) See https://unlicense.org

@@ -1,7 +1,7 @@
 # Dev Guide - Browser Store Test Data
 How to guide for developing Browser Store Test Data.
 
-# Index
+## Index
 - [Developing](#developing)
   - [Installing Dependencies](#installing-dependencies)
 - [Containers](#containers) 
@@ -9,18 +9,18 @@ How to guide for developing Browser Store Test Data.
 - [Project Aliases](#project-aliases)
 - [Resources](#resources)
 
-## Developing
+### Developing
 
-### Installing Dependencies
+#### Installing Dependencies
 1. `npm install` (install all dependencies)
 2. `npm install [DEPENDENCY] --save-dev` (to install a specific dependency)
 
-## Containers
+### Containers
 Containers allow one to develop and test in isolated 'spaces'.
 There are many options available VM images, dedicated machines/computers/servers, Docker, etc.
 Here this project has employed "Linux Containers", see resources.
 
-### LXC Container
+#### LXC Container
 This employs a helper script to create a small Alpine Linux container with prerequisite software Node.js, etc.
 
 See ['bash-scripts' Github Project](https://github.com/eugene-the-red/bash-scripts) and look in the lxc dir.
@@ -30,7 +30,7 @@ See ['bash-scripts' Github Project](https://github.com/eugene-the-red/bash-scrip
 ./lxc-create-node-container.sh browser-store-test-data 10.104.71.8 /projects/code/node-module/browser-store-test-data
 ```
 
-## Project Aliases
+### Project Aliases
 Project aliases, simply allow you to jump to specific project easily.
 
 See ['bash-profile-aliases' Github project](https://github.com/eugene-the-red/bash-profile-aliases) project.
@@ -45,10 +45,10 @@ alias browser-store-test-data.lxc.run-in="lxc.run-in.container browser-store-tes
 alias browser-store-test-data.project="cd ~/projects/code/node-module/browser-store-test-data"
 ```
 
-## Publishing
-1. `npm adduser`
+### Publishing
+1. `npm adduser` (only needed on first occasion)
 2. `npm login`
 3. `npm publish --access=public`
 
-## Resources
+### Resources
 * [Linux Containers (LXD/LXC)](https://linuxcontainers.org/lxd/introduction/)
