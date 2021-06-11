@@ -53,7 +53,10 @@ alias browser-store-test-data.project="cd ~/projects/code/node-module/browser-st
 3. `npm publish --access=public`
 
 #### Automated CI 
-Using Github Actions
+This project employs Github Actions.
+
+1. A NPM Access Token is required - store this as repository secret `NPM_DEPLOY_TOKEN`
+2. Github secrets token - store this as personal access token `GITHUB_TOKEN`
 
 
 ### Resources
