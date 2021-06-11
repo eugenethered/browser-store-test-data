@@ -7,6 +7,7 @@ How to guide for developing Browser Store Test Data.
 - [Containers](#containers) 
   - [LXC Container](#lxc-container)
 - [Project Aliases](#project-aliases)
+- [Publishing](#publishing)
 - [Resources](#resources)
 
 ### Developing
@@ -49,6 +50,15 @@ alias browser-store-test-data.project="cd ~/projects/code/node-module/browser-st
 1. `npm adduser` (only needed on first occasion)
 2. `npm login`
 3. `npm publish --access=public`
+
+#### Prerequisites
+Releasing from container requires git, therefore in the container install git using apk.
+
+```shell
+lxc exec browser-store-test-data -- apk update
+lxc exec browser-store-test-data -- apk upgrade
+lxc exec browser-store-test-data -- apk add git
+```
 
 ### Resources
 * [Linux Containers (LXD/LXC)](https://linuxcontainers.org/lxd/introduction/)
