@@ -7,8 +7,11 @@ How to guide for developing Browser Store Test Data.
 - [Containers](#containers) 
   - [LXC Container](#lxc-container)
 - [Project Aliases](#project-aliases)
-- [Publishing](#publishing)
+- [Deploying](#deploying)
+  - [Deploy from container](#deploy-from-container)
   - [Automated CI](#automated-ci)
+    - [Workflow prerequisites](#workflow-prerequisites)
+    - [Workflow commit messages](#workflow-commit-messages)
 - [Resources](#resources)
 
 ### Developing
@@ -47,17 +50,28 @@ alias browser-store-test-data.lxc.run-in="lxc.run-in.container browser-store-tes
 alias browser-store-test-data.project="cd ~/projects/code/node-module/browser-store-test-data"
 ```
 
-### Publishing
+### Deploying
+
+#### Deploy from container
+Deploying from the container, is rather easy. 
+Login and deploy using these steps.
+
 1. `npm adduser` (only needed on first occasion)
 2. `npm login`
 3. `npm publish --access=public`
 
 #### Automated CI 
-This project employs Github Actions.
+This project employs Github Actions. 
+Invariably due to deployment employing `semantic-release`, one has to use specific commit message style/format.
 
-1. A NPM Access Token is required - store this as repository secret `NPM_DEPLOY_TOKEN`
-2. Github secrets token - store this as personal access token `GITHUB_TOKEN`
+##### Workflow prerequisites
+* A NPM Access Token is required - store this as repository secret `NPM_DEPLOY_TOKEN`
+* Github secrets token - store this as personal access token `GITHUB_TOKEN`
 
+##### Workflow commit messages
+`semantic-release` uses [angular style commit messages](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit) by default.
+Therefore if you want to trigger a release, you need to commit as follows:
+* `feat: initial release`
 
 ### Resources
 * [Linux Containers (LXD/LXC)](https://linuxcontainers.org/lxd/introduction/)
