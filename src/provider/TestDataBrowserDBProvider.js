@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import Localbase from 'localbase'
+import Localbase from 'localbase/dist/localbase.min'
 import { PLUGIN_NAME } from '../config/constants'
 
 class TestDataBrowserDBProvider {
