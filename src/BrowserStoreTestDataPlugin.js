@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import { PLUGIN_NAME } from 'config/constants'
+import { PLUGIN_NAME } from './config/constants'
 import TestDataBrowserDBProvider from './provider/TestDataBrowserDBProvider'
 
 export default class BrowserStoreTestDataPlugin {

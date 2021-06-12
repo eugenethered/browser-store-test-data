@@ -1,3 +1,3 @@
-const plugin = require("./BrowserStoreTestDataPlugin")
+const plugin = require('./BrowserStoreTestDataPlugin')
 
 module.exports = plugin.default
