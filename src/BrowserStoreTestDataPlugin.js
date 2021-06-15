@@ -3,23 +3,24 @@ import chalk from 'chalk'
 export default class BrowserStoreTestDataPlugin {
 
     constructor (options) {
+        this.name = 'browser-store-test-data-plugin'
         this.options = options
     }
 
     apply (compiler) {
-        const PLUGIN_NAME = 'browser-store-test-data-plugin'
-        const logger = compiler.getInfrastructureLogger(PLUGIN_NAME)
+        const pluginName = this.name
+        const logger = compiler.getInfrastructureLogger(pluginName)
 
-        compiler.hooks.beforeRun.tap(PLUGIN_NAME, (compiler) => {
-            logger.log(chalk.green(`${PLUGIN_NAME}: loading test data before compilation`))
+        compiler.hooks.beforeRun.tap(pluginName, (compiler) => {
+            logger.log(chalk.green('loading test data before compilation'))
         })
 
-        compiler.hooks.compilation.tap(PLUGIN_NAME, (compilation, compilationParams) => {
-            logger.log(chalk.green(`${PLUGIN_NAME}: loading test during compilation`))
+        compiler.hooks.compilation.tap(pluginName, (compilation, compilationParams) => {
+            logger.log(chalk.green('loading test during compilation'))
         })
 
-        compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
-            logger.log(chalk.green(`${PLUGIN_NAME}: hello... is it me you're looking for...`))
+        compiler.hooks.emit.tap(pluginName, (compilation) => {
+            logger.log(chalk.green('hello... is it me you\'re looking for...'))
         })
     }
 }

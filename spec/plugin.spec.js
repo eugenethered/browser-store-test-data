@@ -1,7 +1,10 @@
 /* eslint-env jest */
 
+import BrowserStoreTestDataPlugin from '../src/BrowserStoreTestDataPlugin'
+
 describe('Browser Store Test Data Plugin', () => {
-    it('should initialize', () => {
-        expect(1).toBe(1)
+    it('should initialize with plugin specified name', () => {
+        const plugin = new BrowserStoreTestDataPlugin()
+        expect(plugin.name).toBe('browser-store-test-data-plugin')
     })
 })

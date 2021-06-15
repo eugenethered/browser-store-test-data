@@ -15,7 +15,7 @@ A simple way to load test data for the browser store. Supports IndexDB.
 ### Installation
 ```shell
 # Using npm, installing to local project (development)
-npm install --save-dev browser-store-test-data
+npm i -D browser-store-test-data
 ```
 
 ### Usage
