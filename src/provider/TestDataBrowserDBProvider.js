@@ -1,6 +1,7 @@
 import chalk from 'chalk'
-import Localbase from 'localbase/dist/localbase.min'
-import { PLUGIN_NAME } from '../config/constants'
+
+//todo: referencing this is an issue (webpack -> dep -> dep EMScript)
+import Localbase from 'localbase'
 
 class TestDataBrowserDBProvider {
 
@@ -30,7 +31,8 @@ class TestDataBrowserDBProvider {
             const response = await fetch(testDataFile)
             const json = await response.json()
             await this.storeAll(collectionName, json)
-            console.log(chalk.green(`${PLUGIN_NAME}: loaded data from [${testDataFile}] into collection [${collectionName}]`))
+            //todo: get access to the appropriate logger
+            console.log(chalk.green(`loaded data from [${testDataFile}] into collection [${collectionName}]`))
         }
     }
 

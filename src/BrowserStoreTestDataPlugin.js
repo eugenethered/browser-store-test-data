@@ -1,6 +1,4 @@
 import chalk from 'chalk'
-import { PLUGIN_NAME } from './config/constants'
-import TestDataBrowserDBProvider from './provider/TestDataBrowserDBProvider'
 
 export default class BrowserStoreTestDataPlugin {
 
@@ -9,16 +7,19 @@ export default class BrowserStoreTestDataPlugin {
     }
 
     apply (compiler) {
-        compiler.hooks.emit.tapPromise(PLUGIN_NAME, (compilation) => {
-            return new Promise((resolve, reject) => {
-                console.log(chalk.green(`${PLUGIN_NAME}: loading test data...`))
+        const PLUGIN_NAME = 'browser-store-test-data-plugin'
+        const logger = compiler.getInfrastructureLogger(PLUGIN_NAME)
 
-                const browserDatabase = this.options.browserDatabase
-                const testData = this.options.testData
-                const provider = new TestDataBrowserDBProvider(browserDatabase)
+        compiler.hooks.beforeRun.tap(PLUGIN_NAME, (compiler) => {
+            logger.log(chalk.green(`${PLUGIN_NAME}: loading test data before compilation`))
+        })
 
-                resolve(provider.injectTestData(testData))
-            })
+        compiler.hooks.compilation.tap(PLUGIN_NAME, (compilation, compilationParams) => {
+            logger.log(chalk.green(`${PLUGIN_NAME}: loading test during compilation`))
+        })
+
+        compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
+            logger.log(chalk.green(`${PLUGIN_NAME}: hello... is it me you're looking for...`))
         })
     }
 }
