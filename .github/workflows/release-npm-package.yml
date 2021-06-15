@@ -1,4 +1,4 @@
-name: browser-store-test-data build and deploy
+name: plugin-release
 
 on:
   push:
