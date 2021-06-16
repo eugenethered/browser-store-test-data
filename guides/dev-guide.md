@@ -12,6 +12,8 @@ How to guide for developing Browser Store Test Data.
   - [Automated CI](#automated-ci)
     - [Workflow prerequisites](#workflow-prerequisites)
     - [Workflow commit messages](#workflow-commit-messages)
+    - [Updating the main branch code after during release](#updating-the-main-branch-code-after-during-release)
+- [Installing this plugin from dir](#installing-this-plugin-from-dir)
 - [Resources](#resources)
 
 ### Developing
@@ -72,6 +74,21 @@ Invariably due to deployment employing `semantic-release`, one has to use specif
 `semantic-release` uses [angular style commit messages](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit) by default.
 Therefore if you want to trigger a release, you need to commit as follows:
 * `feat: initial release`
+
+##### Updating the main branch code after during release
+By default `semantic-release` does not provide git update on master by default, 
+so you need to install `@semantic-release/git` and add this to the `.releaserc` config.
+
+### Installing this plugin from dir
+One does not want to keep publishing the module in order to make changes.
+So it's best to install this via npm "folder" option. Here I'm using a LXC container (sp paths may vary for you).
+
+1. If using a container, mount the top level dir as follows (stop container first):
+```shell
+lxc config device add [CONTAINER_NAME] node-module-source-dir disk source=$HOME/projects/code/node-module path=/home/contain/projects/code/node-module
+```
+2. `npm i /home/contain/projects/code/node-module/browser-store-test-data`
+3. Update this project with `npm run compile` or `nc`
 
 ### Resources
 * [Linux Containers (LXD/LXC)](https://linuxcontainers.org/lxd/introduction/)
