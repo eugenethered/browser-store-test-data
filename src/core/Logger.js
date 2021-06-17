@@ -9,7 +9,7 @@ class Logger {
     log = (message) => this.useLog(message)
 
     useLog = (message) => {
-        this.logger.log(chalk.cyan(message))
+        this.logger.log(chalk.yellow(message))
     }
 }
 

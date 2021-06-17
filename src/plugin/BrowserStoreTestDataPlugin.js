@@ -34,7 +34,7 @@ export default class BrowserStoreTestDataPlugin {
                     const publicLoaderFile = `${this.testPublicPath}/${this.testLoaderFile}`
                     const loaderFilePath = require.resolve('../loader/index.js')
 
-                    this.logger.log(`Added loader [${publicLoaderFile}]`)
+                    this.logger.log(`ADDED loader [${publicLoaderFile}]`)
 
                     const contents = fs.readFileSync(loaderFilePath)
                     const webpackFileSource = new sources.RawSource(contents)
@@ -79,7 +79,7 @@ export default class BrowserStoreTestDataPlugin {
         compiler.hooks.assetEmitted.tap(
             pluginName,
             (file, { content, source, outputPath, compilation, targetPath }) => {
-                this.logger.log(`Emitted [${file}]`)
+                this.logger.log(`EMITTED [${file}]`)
             }
         )
     }
