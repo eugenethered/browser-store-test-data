@@ -4,7 +4,11 @@
 ![GitHub issues](https://img.shields.io/github/issues/eugene-the-red/browser-store-test-data)
 
 # Browser Store Test Data
-A simple way to load test data for the browser store. Supports IndexDB.
+A simple way to load test data into the browser store. Supports [IndexedDB](https://www.w3.org/TR/IndexedDB/).
+
+Essentially when developing, you provide a file with some test data.
+This test data is loaded into the browser store & ready before your application runs. 
+Your application then runs & reads test data from the browser store.
 
 ## Index
 - [Installation](#installation)
@@ -23,7 +27,7 @@ The main intended method to use this in your project via webpack plugin.
 
 ### Webpack Plugin Usage
 ```js
-// load the library and add to plugins section with options
+// load the library & add to plugins section with otions. Specify test data file(s) 
 const BrowserStoreTestDataPlugin = require('browser-store-test-data')
 
 plugins: [
