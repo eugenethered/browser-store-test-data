@@ -28,7 +28,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
+  "main": "dist/plugin/index.js",
   "engines": {
     "node": ">=10"
   },
