@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { Compilation, sources } from 'webpack'
-import chalk from 'chalk'
+
+import Logger from '../core/Logger'
 
 export default class BrowserStoreTestDataPlugin {
 
@@ -13,15 +14,15 @@ export default class BrowserStoreTestDataPlugin {
     }
 
     apply (compiler) {
-        this.logger = compiler.getInfrastructureLogger(this.name)
+        this.logger = new Logger(compiler.getInfrastructureLogger(this.name))
 
         this.addTestLoader(compiler)
         this.injectTestLoader(compiler)
+        this.reportEmittedAssets(compiler)
     }
 
     addTestLoader (compiler) {
         const pluginName = this.name
-        const logger = this.logger
 
         compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
             compilation.hooks.processAssets.tap(
@@ -31,9 +32,9 @@ export default class BrowserStoreTestDataPlugin {
                 },
                 () => {
                     const publicLoaderFile = `${this.testPublicPath}/${this.testLoaderFile}`
-                    const loaderFilePath = require.resolve('./loader/index.js')
+                    const loaderFilePath = require.resolve('../loader/index.js')
 
-                    logger.log(chalk.green(`added loader file:[${publicLoaderFile}]`))
+                    this.logger.log(`Added loader [${publicLoaderFile}]`)
 
                     const contents = fs.readFileSync(loaderFilePath)
                     const webpackFileSource = new sources.RawSource(contents)
@@ -70,6 +71,17 @@ export default class BrowserStoreTestDataPlugin {
                 }
             )
         })
+    }
+
+    reportEmittedAssets (compiler) {
+        const pluginName = this.name
+
+        compiler.hooks.assetEmitted.tap(
+            pluginName,
+            (file, { content, source, outputPath, compilation, targetPath }) => {
+                this.logger.log(`Emitted [${file}]`)
+            }
+        )
     }
 }
 
