@@ -14,6 +14,7 @@ export default class BrowserStoreTestDataPlugin {
 
     apply (compiler) {
         this.logger = compiler.getInfrastructureLogger(this.name)
+
         this.addTestLoader(compiler)
         this.injectTestLoader(compiler)
     }
@@ -22,7 +23,7 @@ export default class BrowserStoreTestDataPlugin {
         const pluginName = this.name
         const logger = this.logger
 
-        compiler.hooks.compilation.tap(pluginName, (compilation) => {
+        compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
             compilation.hooks.processAssets.tap(
                 {
                     name: pluginName,
@@ -58,7 +59,7 @@ export default class BrowserStoreTestDataPlugin {
                     Object.entries(assets).forEach(([pathname, source]) => {
                         if(pathname === 'index.html') {
                             const htmlPortionToUpdate = '<script'
-                            const htmlUpdate = `<script defer src="${publicPath}${loaderFile}"></script>${htmlPortionToUpdate}`
+                            const htmlUpdate = `<script src="${publicPath}${loaderFile}"></script>${htmlPortionToUpdate}`
 
                             const fileContent = source.source().replace(htmlPortionToUpdate, htmlUpdate)
 
