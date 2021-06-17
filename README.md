@@ -33,16 +33,13 @@ plugins: [
         testData: [
           {
               collectionName: 'collection-name',
-              filePath: 'path/to/file(s)/dir'
+              dataFile: '.path/to/file/dir'
           }
         ]
       }
     )    
 ]    
 ```
-
-### Development
-See the specific [development guide](guides/dev-guide.md).
 
 ### License
 (Unlicense) See https://unlicense.org
