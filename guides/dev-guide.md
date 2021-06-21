@@ -87,7 +87,7 @@ So it's best to install this via npm "folder" option. Here I'm using a LXC conta
 ```shell
 lxc config device add [CONTAINER_NAME] node-module-source-dir disk source=$HOME/projects/code/node-module path=/home/contain/projects/code/node-module
 ```
-2. `npm i /home/contain/projects/code/node-module/browser-store-test-data`
+2. `npm i -D /home/contain/projects/code/node-module/browser-store-test-data`
 3. Update this project with `npm run compile` or `nc`
 
 ### Resources
