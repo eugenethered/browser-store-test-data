@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 
-class Logger {
+class ConsoleLogger {
 
     constructor (externalLogger) {
         this.logger = externalLogger
@@ -13,4 +13,4 @@ class Logger {
     }
 }
 
-export default Logger
+export default ConsoleLogger

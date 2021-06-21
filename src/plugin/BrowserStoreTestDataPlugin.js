@@ -1,20 +1,19 @@
 import fs from 'fs'
 import { Compilation, sources } from 'webpack'
 
-import Logger from '../core/Logger'
+import { PLUGIN_NAME } from '../core/constants'
+import ConsoleLogger from '../core/logger/ConsoleLogger.js'
 
 export default class BrowserStoreTestDataPlugin {
 
     constructor (options) {
-        this.name = 'browser-store-test-data-plugin'
         this.options = options || {}
-
         this.testLoaderFile = 'test-loader.js'
         this.testPublicPath = 'test'
     }
 
     apply (compiler) {
-        this.logger = new Logger(compiler.getInfrastructureLogger(this.name))
+        this.logger = new ConsoleLogger(compiler.getInfrastructureLogger(PLUGIN_NAME))
 
         this.addTestLoader(compiler)
         this.injectTestLoader(compiler)
@@ -22,17 +21,15 @@ export default class BrowserStoreTestDataPlugin {
     }
 
     addTestLoader (compiler) {
-        const pluginName = this.name
-
-        compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
+        compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (compilation) => {
             compilation.hooks.processAssets.tap(
                 {
-                    name: pluginName,
+                    name: PLUGIN_NAME,
                     stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
                 },
                 () => {
                     const publicLoaderFile = `${this.testPublicPath}/${this.testLoaderFile}`
-                    const loaderFilePath = require.resolve('../loader/index.js')
+                    const loaderFilePath = require.resolve('../loader/loader.bundle.js')
 
                     this.logger.log(`ADDED loader [${publicLoaderFile}]`)
 
@@ -45,12 +42,10 @@ export default class BrowserStoreTestDataPlugin {
     }
 
     injectTestLoader (compiler) {
-        const pluginName = this.name
-
-        compiler.hooks.compilation.tap(pluginName, (compilation) => {
+        compiler.hooks.compilation.tap(PLUGIN_NAME, (compilation) => {
             compilation.hooks.processAssets.tap(
                 {
-                    name: pluginName,
+                    name: PLUGIN_NAME,
                     stage: Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE,
                 },
                 (assets) => {
@@ -74,10 +69,8 @@ export default class BrowserStoreTestDataPlugin {
     }
 
     reportEmittedAssets (compiler) {
-        const pluginName = this.name
-
         compiler.hooks.assetEmitted.tap(
-            pluginName,
+            PLUGIN_NAME,
             (file, { content, source, outputPath, compilation, targetPath }) => {
                 this.logger.log(`EMITTED [${file}]`)
             }

@@ -1,11 +1,11 @@
-import chalk from 'chalk'
-
-//todo: referencing this is an issue (webpack -> dep -> dep EMScript)
 import Localbase from 'localbase'
+
+import BrowserLogger from '../../core/logger/BrowserLogger'
 
 class TestDataBrowserDBProvider {
 
     constructor(browserDatabase) {
+        this.logger = new BrowserLogger()
         this.initDatabase(browserDatabase)
     }
 
@@ -31,8 +31,7 @@ class TestDataBrowserDBProvider {
             const response = await fetch(testDataFile)
             const json = await response.json()
             await this.storeAll(collectionName, json)
-            //todo: get access to the appropriate logger
-            console.log(chalk.green(`loaded data from [${testDataFile}] into collection [${collectionName}]`))
+            this.logger.log(`loaded data from [${testDataFile}] into collection [${collectionName}]`)
         }
     }
 
