@@ -9,7 +9,8 @@ export default class BrowserStoreTestDataPlugin {
 
     constructor (options) {
         this.options = options || {}
-        this.testLoaderFile = 'test-loader.js'
+        this.testLoaderScript = 'test-loader.js'
+        this.testLoadFile = 'test-data-load.json'
         this.testBaseUri = 'test'
         this.testDataUri = `${this.testBaseUri}/data`
     }
@@ -30,7 +31,7 @@ export default class BrowserStoreTestDataPlugin {
                     stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
                 },
                 () => {
-                    const loaderScriptUri = `${this.testBaseUri}/${this.testLoaderFile}`
+                    const loaderScriptUri = `${this.testBaseUri}/${this.testLoaderScript}`
                     const loaderFileAbsolutePath = require.resolve('../loader/loader.bundle.js')
                     const emittedAssetUri = this.emitFileAsAsset(compilation, loaderFileAbsolutePath, loaderScriptUri)
                     this.logger.log(`ADDED loader [${emittedAssetUri}]`)
@@ -47,14 +48,29 @@ export default class BrowserStoreTestDataPlugin {
                     stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
                 },
                 (assets) => {
+                    const browserDatabase = this.options.browserDatabase
                     const testDataConfig = this.options.testData
+
+                    let testDataLoad = {
+                        database: browserDatabase,
+                        testData: []
+                    }
+
                     testDataConfig.forEach(config => {
                         const testDataFile = config.dataFile
                         const copiedFileUri = this.copyTestDataFile(compiler, compilation, testDataFile)
                         this.logger.log(`COPIED test data file [${copiedFileUri}]`)
+
+                        testDataLoad.testData.push({
+                            collectionName: config.collectionName,
+                            dataUri: copiedFileUri
+                        })
                     })
 
-                    //todo: create load file
+                    const testDataLoadContent = JSON.stringify(testDataLoad)
+                    const testDataLoadFileUri = `${this.testBaseUri}/${this.testLoadFile}`
+                    const emittedAssetUri = this.emitAssetFile(compilation, testDataLoadContent, testDataLoadFileUri)
+                    this.logger.log(`CREATED test data load [${emittedAssetUri}]`)
                 }
             )
         })
@@ -69,7 +85,7 @@ export default class BrowserStoreTestDataPlugin {
                 },
                 (assets) => {
                     const publicPath = compilation.outputOptions.publicPath
-                    const loaderFile = `${this.testBaseUri}/${this.testLoaderFile}`
+                    const loaderFile = `${this.testBaseUri}/${this.testLoaderScript}`
 
                     Object.entries(assets).forEach(([pathname, source]) => {
                         if(pathname === 'index.html') {
@@ -108,9 +124,13 @@ export default class BrowserStoreTestDataPlugin {
 
     emitFileAsAsset (compilation, absoluteFilePath, fileUri) {
         const contents = fs.readFileSync(absoluteFilePath)
+        return this.emitAssetFile(compilation, contents, fileUri)
+    }
+
+    emitAssetFile (compilation, contents, assetFileUri) {
         const webpackFileSource = new sources.RawSource(contents)
-        compilation.emitAsset(fileUri, webpackFileSource)
-        return fileUri
+        compilation.emitAsset(assetFileUri, webpackFileSource)
+        return assetFileUri
     }
 }
 
