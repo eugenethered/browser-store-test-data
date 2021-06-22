@@ -63,11 +63,11 @@ export default class BrowserStoreTestDataPlugin {
 
                         testDataLoad.testData.push({
                             collectionName: config.collectionName,
-                            dataUri: copiedFileUri
+                            testDataUri: copiedFileUri
                         })
                     })
 
-                    const testDataLoadContent = JSON.stringify(testDataLoad)
+                    const testDataLoadContent = JSON.stringify(testDataLoad, undefined, 2)
                     const testDataLoadFileUri = `${this.testBaseUri}/${this.testLoadFile}`
                     const emittedAssetUri = this.emitAssetFile(compilation, testDataLoadContent, testDataLoadFileUri)
                     this.logger.log(`CREATED test data load [${emittedAssetUri}]`)

@@ -30,7 +30,7 @@
   ],
   "main": "dist/plugin/index.js",
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "scripts": {
     "clean": "del-cli dist",
