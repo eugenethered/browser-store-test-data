@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { Compilation, sources } from 'webpack'
 
-import { PLUGIN_NAME } from '../core/constants'
+import { PLUGIN_NAME, TEST_BASE_URI, TEST_DATA_LOAD_URI } from '../core/constants'
 import ConsoleLogger from '../core/logger/ConsoleLogger.js'
 
 export default class BrowserStoreTestDataPlugin {
@@ -10,8 +10,8 @@ export default class BrowserStoreTestDataPlugin {
     constructor (options) {
         this.options = options || {}
         this.testLoaderScript = 'test-loader.js'
-        this.testLoadFile = 'test-data-load.json'
-        this.testBaseUri = 'test'
+        this.testDataLoadUri = TEST_DATA_LOAD_URI
+        this.testBaseUri = TEST_BASE_URI
         this.testDataUri = `${this.testBaseUri}/data`
     }
 
@@ -63,12 +63,12 @@ export default class BrowserStoreTestDataPlugin {
 
                         testDataLoad.testData.push({
                             collectionName: config.collectionName,
-                            testDataUri: copiedFileUri
+                            testDataUri: `/${copiedFileUri}`
                         })
                     })
 
                     const testDataLoadContent = JSON.stringify(testDataLoad, undefined, 2)
-                    const testDataLoadFileUri = `${this.testBaseUri}/${this.testLoadFile}`
+                    const testDataLoadFileUri = this.testDataLoadUri
                     const emittedAssetUri = this.emitAssetFile(compilation, testDataLoadContent, testDataLoadFileUri)
                     this.logger.log(`CREATED test data load [${emittedAssetUri}]`)
                 }

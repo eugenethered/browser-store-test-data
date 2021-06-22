@@ -4,9 +4,23 @@ import BrowserLogger from '../../core/logger/BrowserLogger'
 
 class TestDataBrowserDBProvider {
 
-    constructor(browserDatabase) {
+    constructor() {
         this.logger = new BrowserLogger()
-        this.initDatabase(browserDatabase)
+    }
+
+    initialize = (testDataLoadUri) => {
+        (async () => {
+            const load = await this.fetchUriResource(testDataLoadUri)
+            this.logger.log(`initializing using test load [${testDataLoadUri}]`)
+
+            const database = load.database
+            this.logger.log(`database to load test data [${database}]`)
+            this.initDatabase(database)
+
+            const testData = load.testData
+            this.logger.log(`test data to load count [${testData.length}]`)
+            await this.injectTestData(testData)
+        })()
     }
 
     initDatabase = (browserDatabase) => {
@@ -17,22 +31,29 @@ class TestDataBrowserDBProvider {
     }
 
     injectTestData = async (testData) => {
-        for (const testDataToInject in testData) {
+        for await (let testDataToInject of testData) {
             const collectionName = testDataToInject.collectionName
-            const filePath = testDataToInject.filePath
-            await this.loadDBTestData(collectionName, filePath)
+            const testDataUri = testDataToInject.testDataUri
+            await this.loadDBTestData(collectionName, testDataUri)
         }
     }
 
-    loadDBTestData = async (collectionName, testDataFile) => {
+    loadDBTestData = async (collectionName, testDataUri) => {
         const isDataAlreadyLoaded = await this.isDataStored(collectionName)
 
-        if(!isDataAlreadyLoaded) {
-            const response = await fetch(testDataFile)
-            const json = await response.json()
-            await this.storeAll(collectionName, json)
-            this.logger.log(`loaded data from [${testDataFile}] into collection [${collectionName}]`)
+        if(isDataAlreadyLoaded) {
+            this.logger.log(`collection [${collectionName}] already has data loaded (should you need to override, clear the collection in your browser)`)
+            return
         }
+
+        const testData = await this.fetchUriResource(testDataUri)
+        await this.storeAll(collectionName, testData)
+        this.logger.log(`loaded data [${testData.length}] from [${testDataUri}] into collection [${collectionName}]`)
+    }
+
+    fetchUriResource = async (uri) => {
+        const response = await fetch(uri)
+        return await response.json()
     }
 
     isDataStored = async (collectionName) => {
