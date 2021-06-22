@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import { Compilation, sources } from 'webpack'
 
 import { PLUGIN_NAME } from '../core/constants'
@@ -9,14 +10,15 @@ export default class BrowserStoreTestDataPlugin {
     constructor (options) {
         this.options = options || {}
         this.testLoaderFile = 'test-loader.js'
-        this.testPublicPath = 'test'
+        this.testBaseUri = 'test'
+        this.testDataUri = `${this.testBaseUri}/data`
     }
 
     apply (compiler) {
         this.logger = new ConsoleLogger(compiler.getInfrastructureLogger(PLUGIN_NAME))
-
         this.addTestLoader(compiler)
         this.injectTestLoader(compiler)
+        this.copyTestDataFilesAndCreateLoad(compiler)
         this.reportEmittedAssets(compiler)
     }
 
@@ -28,14 +30,31 @@ export default class BrowserStoreTestDataPlugin {
                     stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
                 },
                 () => {
-                    const publicLoaderFile = `${this.testPublicPath}/${this.testLoaderFile}`
-                    const loaderFilePath = require.resolve('../loader/loader.bundle.js')
+                    const loaderScriptUri = `${this.testBaseUri}/${this.testLoaderFile}`
+                    const loaderFileAbsolutePath = require.resolve('../loader/loader.bundle.js')
+                    const emittedAssetUri = this.emitFileAsAsset(compilation, loaderFileAbsolutePath, loaderScriptUri)
+                    this.logger.log(`ADDED loader [${emittedAssetUri}]`)
+                }
+            )
+        })
+    }
 
-                    this.logger.log(`ADDED loader [${publicLoaderFile}]`)
+    copyTestDataFilesAndCreateLoad (compiler) {
+        compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (compilation) => {
+            compilation.hooks.processAssets.tap(
+                {
+                    name: PLUGIN_NAME,
+                    stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
+                },
+                (assets) => {
+                    const testDataConfig = this.options.testData
+                    testDataConfig.forEach(config => {
+                        const testDataFile = config.dataFile
+                        const copiedFileUri = this.copyTestDataFile(compiler, compilation, testDataFile)
+                        this.logger.log(`COPIED test data file [${copiedFileUri}]`)
+                    })
 
-                    const contents = fs.readFileSync(loaderFilePath)
-                    const webpackFileSource = new sources.RawSource(contents)
-                    compilation.emitAsset(publicLoaderFile, webpackFileSource)
+                    //todo: create load file
                 }
             )
         })
@@ -50,7 +69,7 @@ export default class BrowserStoreTestDataPlugin {
                 },
                 (assets) => {
                     const publicPath = compilation.outputOptions.publicPath
-                    const loaderFile = `${this.testPublicPath}/${this.testLoaderFile}`
+                    const loaderFile = `${this.testBaseUri}/${this.testLoaderFile}`
 
                     Object.entries(assets).forEach(([pathname, source]) => {
                         if(pathname === 'index.html') {
@@ -75,6 +94,23 @@ export default class BrowserStoreTestDataPlugin {
                 this.logger.log(`EMITTED [${file}]`)
             }
         )
+    }
+
+    copyTestDataFile (compiler, compilation, testDataFilePath) {
+        const contextPath = compiler.context
+        const absoluteTestDataFilePath = path.join(contextPath, testDataFilePath)
+
+        const testDataAssetFileName = path.basename(absoluteTestDataFilePath)
+        const testDataAssetUri = `${this.testDataUri}/${testDataAssetFileName}`
+
+        return this.emitFileAsAsset(compilation, absoluteTestDataFilePath, testDataAssetUri)
+    }
+
+    emitFileAsAsset (compilation, absoluteFilePath, fileUri) {
+        const contents = fs.readFileSync(absoluteFilePath)
+        const webpackFileSource = new sources.RawSource(contents)
+        compilation.emitAsset(fileUri, webpackFileSource)
+        return fileUri
     }
 }
 
